@@ -1,0 +1,10 @@
+-e .
+pandas
+scikit-learn
+torch
+torchvision
+torchaudio
+imblearn
+PyYAML
+mlflow
+flask

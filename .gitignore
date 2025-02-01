@@ -1,0 +1,6 @@
+myenv
+__pycache__
+smoking_history_prediction.egg-info
+mlruns
+data
+*.pth
