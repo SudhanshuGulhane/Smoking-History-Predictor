@@ -21,7 +21,7 @@
             });
 
             let result = await response.json();
-            probability = result.probability*100
+            probability = (result.probability*100).toFixed(2)
             smoking_status = result.smoking_status
             
             document.getElementById("predictionResult").innerText = 
@@ -129,15 +129,27 @@
                         <input type="number" id="hemoglobin" name="hemoglobin" min="1" max="25" step="any" required>
                     </div>
                     <div class="form-group">
+                        <label for="urine-protein">Urine Protein</label>
+                        <input type="number" id="urine-protein" name="urine-protein" min="1" max="6" step="any" required>
+                    </div>
+                    <div class="form-group">
                         <label for="serum_creatinine">Serum Creatinine [mg/dL]</label>
                         <input type="number" id="serum_creatinine" name="serum_creatinine" min="0.1" max="98" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sgot-ast">SGOT AST [IU/L]</label>
+                        <input type="number" id="sgot-ast" name="sgot-ast" min="1" max="9999" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sgot-alt">SGOT ALT [IU/L]</label>
+                        <input type="number" id="sgot-alt" name="sgot-alt" min="1" max="7210" step="any" required>
                     </div>
                     <div class="form-group">
                         <label for="gamma_GTP">Gamma GTP [IU/L]</label>
                         <input type="number" id="gamma_GTP" name="gamma_GTP" min="1" max="999" step="any" required>
                     </div>
                     <div class="form-group">
-                        <label for="DRK_YN">Drink Alcohol (0: No, 1: Yes)</label>
+                        <label for="DRK_YN">Drinks Alcohol (0: No, 1: Yes)</label>
                         <input type="number" id="DRK_YN" name="DRK_YN" min="0" max="1" required>
                     </div>
                 </div>
