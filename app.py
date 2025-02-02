@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 import numpy as np
 from smoking_history_prediction.models.predict import load_model, predict
 
@@ -10,7 +10,7 @@ model = load_model(input_dim, model_path)
 
 @app.route("/")
 def home():
-    return jsonify({"message": "Smoking Prediction API is running."})
+    return render_template("index.html")
 
 @app.route("/predict", methods=["POST"])
 def predict_smoking():

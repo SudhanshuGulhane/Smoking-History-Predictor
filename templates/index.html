@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smoking Prediction</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        async function predictSmoking(event) {
+            event.preventDefault();
+            
+            let formData = new FormData(document.getElementById("smokingForm"));
+            let features = [];
+            
+            formData.forEach(value => features.push(parseFloat(value))); 
+
+            let response = await fetch("/predict", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ "features": features })
+            });
+
+            let result = await response.json();
+            probability = result.probability*100
+            smoking_status = result.smoking_status
+            
+            document.getElementById("predictionResult").innerText = 
+                result.error ? `Error: ${result.error}` : `Predicted Smoking Status: ${smoking_status} with ${probability}% confidence`;
+        }
+    </script>
+</head>
+<body>
+    <h2>Smoking Status Form</h2>
+    <div class="form-container">
+        <form id="smokingForm" onsubmit="predictSmoking(event)">
+            <fieldset>
+                <legend>Personal Information</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sex">Sex (0: Female, 1: Male)</label>
+                        <input type="number" id="sex" name="sex" min="0" max="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" name="age" min="20" max="85" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="height">Height (cm)</label>
+                        <input type="number" id="height" name="height" min="130" max="190" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weight">Weight (kg)</label>
+                        <input type="number" id="weight" name="weight" min="25" max="140" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="waistline">Waistline (cm)</label>
+                        <input type="number" id="waistline" name="waistline" min="8" max="999" step="any" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+            
+            <fieldset>
+                <legend>Vision & Hearing</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="sight_left">Sight Left</label>
+                        <input type="number" id="sight_left" name="sight_left" min="0.1" max="9.9" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="sight_right">Sight Right</label>
+                        <input type="number" id="sight_right" name="sight_right" min="0.1" max="9.9" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hear_left">Hearing Left</label>
+                        <input type="number" id="hear_left" name="hear_left" min="1" max="2" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="hear_right">Hearing Right</label>
+                        <input type="number" id="hear_right" name="hear_right" min="1" max="2" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+    
+            <fieldset>
+                <legend>Blood & Health Metrics</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="SBP">SBP [mg/dL]</label>
+                        <input type="number" id="SBP" name="SBP" min="67" max="273" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="DBP">DBP [mg/dL]</label>
+                        <input type="number" id="DBP" name="DBP" min="32" max="185" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="BLDS">BLDS [mg/dL]</label>
+                        <input type="number" id="BLDS" name="BLDS" min="25" max="852" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="tot_chole">Total Cholesterol [mg/dL]</label>
+                        <input type="number" id="tot_chole" name="tot_chole" min="30" max="2344" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="HDL_chole">HDL Cholesterol [mg/dL]</label>
+                        <input type="number" id="HDL_chole" name="HDL_chole" min="1" max="8110" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="LDL_chole">LDL Cholesterol [mg/dL]</label>
+                        <input type="number" id="LDL_chole" name="LDL_chole" min="1" max="5119" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="triglyceride">Triglyceride [mg/dL]</label>
+                        <input type="number" id="triglyceride" name="triglyceride" min="1" max="9490" step="any" required>
+                    </div>
+                </div>
+            </fieldset>
+
+            <br>
+    
+            <fieldset>
+                <legend>Liver & Kidney Functions</legend>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="hemoglobin">Hemoglobin [g/dL]</label>
+                        <input type="number" id="hemoglobin" name="hemoglobin" min="1" max="25" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="serum_creatinine">Serum Creatinine [mg/dL]</label>
+                        <input type="number" id="serum_creatinine" name="serum_creatinine" min="0.1" max="98" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="gamma_GTP">Gamma GTP [IU/L]</label>
+                        <input type="number" id="gamma_GTP" name="gamma_GTP" min="1" max="999" step="any" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="DRK_YN">Drink Alcohol (0: No, 1: Yes)</label>
+                        <input type="number" id="DRK_YN" name="DRK_YN" min="0" max="1" required>
+                    </div>
+                </div>
+            </fieldset>
+    
+            <button type="submit">Predict</button>
+        </form>
+    </div>
+
+    <h3 id="predictionResult"></h3>
+</body>
+</html>
