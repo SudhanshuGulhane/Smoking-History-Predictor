@@ -94,7 +94,7 @@ az container create \
 
 Test API on Azure:
 ```bash
-curl -X POST "http://smoking-prediction-api-demo.eastus.azurecontainer.io:4000/predict" -H "Content-Type: application/json" \
+curl -X POST "http://smoking-prediction-app-demo.eastus.azurecontainer.io:4000/predict" -H "Content-Type: application/json" \
 -d '{"features": [0,40,160,50,72.0,1.0,0.5,1.0,1.0,103.0,70.0,85.0,233.0,96.0,117.0,95.0,13.5,1.0,0.8,20.0,14.0,14.0,1.0]}'
 ```
 
