@@ -144,3 +144,7 @@ This project is licensed under the **MIT License**.
 ---
 
 ### 🌟 _If you like this project, don't forget to ⭐ it!_
+
+### 📷 **Snapshot of the UI**
+
+![image](https://github.com/user-attachments/assets/7f2cf00c-58d6-40f9-ac7f-6e508f3eb0de)
