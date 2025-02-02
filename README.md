@@ -1,28 +1,146 @@
-Dataset link: https://www.kaggle.com/datasets/sooyoungher/smoking-drinking-dataset
+# 🚀 Smoking History Prediction API (MLOps)
 
-Proposed Approach: A feed-forward neural network architecture comprising five layers is instantiated. The initial layer serves as the input layer, incorporating 23 neurons to represent features from
-the dataset. Subsequently, the second, third, and fourth layers function as hidden layers, encompassing 16, 8, and 4 neurons, respectively. Rectified Linear Unit (ReLU) is employed as the
-activation function in these hidden layers. The fifth layer, acting as the output layer, comprises a single neuron tasked with predicting binary outputs (0 or 1). The Sigmoid function
-serves as the activation function for the output layer. To introduce regularization to the dense layer weights, a kernel_regularizer parameter utilizing L2 regularization penalty
-is applied, with a regularization strength set to 0.001. The algorithm employs a batch size of 200 and utilizes the Adam optimizer with a learning rate of 0.0002. For training purposes, 
-the binary cross-entropy loss function is employed, fitting the nature of binary classification tasks. The architectural representation of the model is visually depicted in Figure. 
-Additionally, the training loss versus validation loss plot for the proposed neural network architecture is illustrated in Figure., providing insights into the convergence and performance of the model during training.
-This neural network design is intentionally structured to accommodate complex relationships within the data. The choice of ReLU activation in hidden layers promotes nonlinear learning, 
-while the Sigmoid activation in the output layer facilitates binary classification tasks. The incorporation of L2 regularization aids in preventing overfitting by penalizing large weights, 
-contributing to a more generalized model. The choice of the Adam optimizer, coupled with an appropriately tuned learning rate, enhances the efficiency of the optimization process during training. 
-The use of batch-wise updates, indicated by the batch size of 200, further optimizes the convergence process. This architecture, embodied in Fig.2., is a manifestation of thoughtful design choices 
-tailored to the characteristics of the dataset and the objectives of the binary classification task. The training loss versus validation loss plot in Fig.3. serves as a diagnostic tool, 
-providing insights into the model’s performance and generalization capabilities during the training process.
+This project is an **end-to-end MLOps pipeline** for predicting a person's smoking history using medical diagnostic data. The system is built with **PyTorch for deep learning**, **Flask for API deployment**, and **Docker & Azure for cloud deployment**.
 
-### Architecture of the model
-![architecture](https://github.com/SudhanshuGulhane/Smoking-History-Predictor/assets/50482460/34d2e7d2-20a5-4979-b2d7-036e51c20aca)
+---
 
-### Results
-![cross-validation-nn](https://github.com/SudhanshuGulhane/Smoking-History-Predictor/assets/50482460/a563cc63-630f-4cfb-801a-60d03a61808f)
+## 🌟 **Features**
+✅ **Neural Network-based Smoking Prediction**  
+✅ **Automated Data Preprocessing Pipeline**  
+✅ **Flask API for Model Deployment**  
+✅ **Containerization with Docker**  
+✅ **CI/CD Pipeline using GitHub Actions**  
+✅ **Cloud Deployment on Azure Container Instances (ACI)**  
 
-### Plots
-![loss_plot](https://github.com/SudhanshuGulhane/Smoking-History-Predictor/assets/50482460/21daaeba-57a0-4dea-93c4-aa957e82d5f6)
+---
 
-### Hyperparameter tuning
-![image](https://github.com/SudhanshuGulhane/Smoking-History-Predictor/assets/50482460/bd9be91e-6c9b-432c-9326-f453d347b5de)
+## 📁 **Project Structure**
+```
+├── config/                  # model configurations
+├── data/                    # Raw & Processed Data
+├── models/                  # store trained pytorch model
+├── notebooks/               # Jupyter Notebooks for EDA & Training
+├── smoking_history_prediction/
+│   ├── models/              # Neural Network Model & Training
+│   ├── data/                # Data Processing Pipeline
+├── tests/                   # Unit Tests
+├── .github/workflows/       # GitHub Actions CI/CD Pipeline
+├── Dockerfile               # Docker Container Setup
+├── requirements.txt         # Dependencies
+├── app.py                   # Flask API
+├── README.md                # Documentation
+└── .gitignore               # Ignore Unnecessary Files
+```
 
+---
+
+## 📊 **1. Data Pipeline**
+- Loads raw medical data (`CSV`).
+- Cleans missing values & standardizes features.
+- Saves processed data for training.
+
+---
+
+## 🤖 **2. Model Development**
+- **Neural Network** built using **PyTorch**.
+- Tracks experiments using **MLflow**.
+- Saves trained model as `smoking_nn.pth`.
+
+```bash
+python run_scripts.py
+```
+
+---
+
+## 🔥 **3. API Deployment (Flask)**
+- Flask-based REST API to serve predictions.
+- Endpoint: `/predict` (POST request).
+```bash
+python app.py
+```
+
+Example Request:
+```json
+{
+  "features": [0,40,160,50,72.0,1.0,0.5,1.0,1.0,103.0,70.0,85.0,233.0,96.0,117.0,95.0,13.5,1.0,0.8,20.0,14.0,14.0,1.0]
+}
+```
+
+---
+
+## 🐳 **4. Containerization with Docker**
+Build and run the Docker container:
+```bash
+docker build -t smoking-prediction-api .
+docker run -p 4000:4000 smoking-prediction-api
+```
+
+---
+
+## ☁️ **5. Cloud Deployment (Azure)**
+- The Docker container is deployed on **Azure Container Instances (ACI)**.
+- Steps:
+  1. Push the Docker image to **Azure Container Registry (ACR)**.
+  2. Deploy the image to ACI.
+
+```bash
+az container create \
+    --resource-group myResourceGroup \
+    --name smoking-api-container \
+    --image myacrregistry.azurecr.io/smoking-prediction-api:v1 \
+    --dns-name-label smoking-prediction-app-demo \
+    --ports 4000
+```
+
+Test API on Azure:
+```bash
+curl -X POST "http://smoking-prediction-api-demo.eastus.azurecontainer.io:4000/predict" -H "Content-Type: application/json" \
+-d '{"features": [0,40,160,50,72.0,1.0,0.5,1.0,1.0,103.0,70.0,85.0,233.0,96.0,117.0,95.0,13.5,1.0,0.8,20.0,14.0,14.0,1.0]}'
+```
+
+---
+
+## ⚡ **6. CI/CD Pipeline (GitHub Actions)**
+- Every code push triggers:
+  1. Automated Tests (`pytest`)
+  2. Docker Image Build & Push
+  3. Azure Deployment  
+
+File: `.github/workflows/deploy.yml`
+
+---
+
+## 🛠 **Setup & Installation**
+1️⃣ **Clone this repo**  
+```bash
+git clone https://github.com/SudhanshuGulhane/Smoking-History-Predictor.git
+```
+2️⃣ **Install Dependencies**  
+```bash
+pip install -r requirements.txt
+```
+3️⃣ **Run API Locally**  
+```bash
+python app.py
+```
+
+---
+
+## 🎯 **Future Enhancements**
+- [ ] Implement model monitoring with **Prometheus & Grafana**.
+- [ ] Deploy on **Azure Kubernetes Service (AKS)** for auto-scaling.
+- [ ] Improve model explainability with **SHAP**.
+
+---
+
+## 👨‍💻 **Contributors**
+- **[Sudhanshu Gulhane]** - _MLOps Engineer & Software Developer_
+
+---
+
+## 📜 **License**
+This project is licensed under the **MIT License**.
+
+---
+
+### 🌟 _If you like this project, don't forget to ⭐ it!_
