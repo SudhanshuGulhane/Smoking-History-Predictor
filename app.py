@@ -5,7 +5,7 @@ from smoking_history_prediction.models.predict import load_model, predict
 app = Flask(__name__)
 
 input_dim = 23
-model_path = "smoking_nn.pth"
+model_path = "models/smoking_nn.pth"
 model = load_model(input_dim, model_path)
 
 @app.route("/")
