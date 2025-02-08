@@ -60,12 +60,16 @@ python app.py
 ```
 
 Example Request:
+
 ```json
 {
   "features": [0,40,160,50,72.0,1.0,0.5,1.0,1.0,103.0,70.0,85.0,233.0,96.0,117.0,95.0,13.5,1.0,0.8,20.0,14.0,14.0,1.0]
 }
 ```
 
+```
+features:[sex,age,height,weight,waistline,sight_left,sight_right,hear_left,hear_right,SBP,DBP,BLDS,tot_chole,HDL_chole,LDL_chole,triglyceride,hemoglobin,urine_protein,serum_creatinine,SGOT_AST,SGOT_ALT,gamma_GTP,DRK_YN]
+```
 ---
 
 ## 🐳 **4. Containerization with Docker**
@@ -74,7 +78,6 @@ Build and run the Docker container:
 docker build -t smoking-prediction-api .
 docker run -p 4000:4000 smoking-prediction-api
 ```
-
 ---
 
 ## ☁️ **5. Cloud Deployment (Azure)**
