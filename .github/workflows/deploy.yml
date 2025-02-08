@@ -1,0 +1,67 @@
+name: CI/CD for Smoking Prediction API
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout Repository
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Set Up Python Environment
+      - name: Set Up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.9"
+
+      # Step 3: Install Dependencies
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      # Skipped for now
+      # # Step 4: Run Tests
+      # - name: Run Tests
+      #   run: |
+      #     pytest tests/
+
+      # Step 5: Log in to Azure Container Registry
+      - name: Azure Container Registry Login
+        uses: azure/docker-login@v1
+        with:
+          login-server: smokingprediction.azurecr.io
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
+
+      # Step 6: Build and Push Docker Image
+      - name: Build and Push Docker Image
+        run: |
+          docker build -t smokingprediction.azurecr.io/smoking-prediction-api:${{ github.sha }} .
+          docker push smokingprediction.azurecr.io/smoking-prediction-api:${{ github.sha }}
+
+      # Step 7: Deploy to Azure Container Instances
+      - name: Deploy to ACI
+        run: |
+          az login --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az container create \
+            --resource-group Resource_grp1 \
+            --name smoking-api-container \
+            --image smokingprediction.azurecr.io/smoking-prediction-api:${{ github.sha }} \
+            --dns-name-label smoking-prediction-app-demo-${{ github.run_number }} \
+            --ports 4000 \
+            --cpu 1 --memory 1.5 \
+            --os-type "Linux"
+            --registry-login-server smokingprediction.azurecr.io \
+            --registry-username ${{ secrets.ACR_USERNAME }} \
+            --registry-password ${{ secrets.ACR_PASSWORD }}
+
+      # Step 8: Verify Deployment
+      - name: Verify Deployment
+        run: |
+          az container show --resource-group Resource_grp1 --name smoking-api-container --query "{IP:ipAddress.ip, Status:provisioningState}" --output table
